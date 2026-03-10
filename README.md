@@ -1,85 +1,148 @@
 # Gradle Tank Game (Processing)
 
-A 2D turn-based tank game written in **Java** using the **Processing** library, built with **Gradle**.  
-The game loads multiple levels from `config.json` (with map layouts in `level1.txt`, `level2.txt`, `level3.txt`), shows a start screen, runs the match, and displays a leaderboard at the end.
+A **2D turn-based tank game** written in **Java** using the **Processing** library and built with **Gradle**.
 
-## Features
-- Multiple levels defined via `config.json`
-- Start screen + logo
-- Turn-based tank gameplay (move, aim, fire)
-- Wind affecting shots
-- In-game shop (fuel / health / parachute)
-- End-of-game leaderboard
-- Debug mode shortcuts (if enabled in code)
+The game loads multiple levels from `config.json`, uses map layouts defined in `level1.txt`, `level2.txt`, and `level3.txt`, and features a start screen, gameplay loop, in-game shop, and an end-of-game leaderboard.
 
-## Tech stack
-- Java (Gradle)
-- [Processing](https://processing.org/) (`processing.core.PApplet`)
-- JUnit (test dependencies configured)
+---
 
-## Project structure
-- `build.gradle` — Gradle build config (application main class is `Tanks.App`)
-- `config.json` — level list, backgrounds, optional tree sprites, player colours
-- `level1.txt`, `level2.txt`, `level3.txt` — level layouts
-- `src/main/java/Tanks/` — Java source (main entrypoint: `App.java`)
-- `src/main/resources/Tanks/` — images (backgrounds, UI assets, sprites)
+# Features
 
-## Requirements
-- Java (a modern JDK is recommended)
-- Gradle (or use the Gradle wrapper if you add one)
+* Multiple levels configured via `config.json`
+* Start screen with logo
+* Turn-based tank gameplay
+* Adjustable turret aim and firing power
+* Wind affecting projectile physics
+* In-game shop for upgrades
+* Multiple level backgrounds
+* End-of-game leaderboard
+* Optional debug shortcuts (if enabled in code)
 
-## How to build and run
+---
 
-### Run with Gradle
-From the repository root:
+# Tech Stack
 
-```bash
-./gradlew run
+* **Java**
+* **Gradle** (build system)
+* **Processing** (`processing.core.PApplet`)
+* **JUnit** (test dependencies configured)
+
+---
+
+# Project Structure
+
+```
+project-root/
+│
+├─ build.gradle                 # Gradle build configuration
+├─ config.json                  # Level configuration
+├─ level1.txt                   # Level layout
+├─ level2.txt
+├─ level3.txt
+│
+├─ src/
+│  ├─ main/
+│  │  ├─ java/Tanks/
+│  │  │     App.java            # Main entry point
+│  │  │     *.java              # Game logic classes
+│  │  │
+│  │  └─ resources/Tanks/
+│  │        *.png               # Backgrounds and sprites
+│  │
+│  └─ test/
+│        *.java                 # Unit tests
 ```
 
-If you’re on Windows:
+Main application class:
 
-```bat
-gradlew.bat run
+```
+Tanks.App
 ```
 
-### Build a runnable JAR
-```bash
-./gradlew jar
+---
+
+# Requirements
+
+To run the project you must have:
+
+* **Java 8 or later**
+* **Gradle installed locally**
+
+Check installations:
+
+```
+java -version
+gradle -v
 ```
 
-The JAR will be produced under:
+Note: This repository **does not include a Gradle wrapper**, so `./gradlew` or `gradlew.bat` will not work unless you generate the wrapper yourself.
 
-```text
-build/libs/
+---
+
+# How to Build and Run
+
+Run all commands from the **repository root directory**.
+
+## Run the game
+
+```
+gradle run
 ```
 
-## Controls
+Gradle will:
 
-### Gameplay
-- **Left / Right arrow**: move tank (when it’s your turn and you are not falling)
-- **Up / Down arrow**: aim turret
-- **W / S**: increase / decrease shot power
-- **Space**: fire (also ends your turn)
-- **R**: buy health (when shop is available)
-- **F**: buy fuel (when shop is available)
-- **P**: buy parachute (when shop is available)
-- **C**: skip/advance to next level (forces level update)
+1. Compile the Java code
+2. Resolve dependencies
+3. Launch the Processing application
 
-### UI / Flow
-- Click **Start** on the start screen to begin.
-- Click the **shop icon** (bottom-right area) to open/close the shop overlay.
+---
+# Game Controls
 
-## Configuration
+## Gameplay Controls
 
-### Levels (`config.json`)
-`config.json` contains an array of levels. Each level includes:
-- `layout`: a `levelX.txt` file
-- `background`: a PNG in `src/main/resources/Tanks/`
-- `foreground-colour`: RGB string like `"255,255,255"`
-- optional `trees`: a tree sprite PNG
+| Key                | Action                           |
+| ------------------ | -------------------------------- |
+| Left / Right Arrow | Move tank                        |
+| Up / Down Arrow    | Adjust turret angle              |
+| W / S              | Increase / decrease firing power |
+| Space              | Fire weapon and end turn         |
+| C                  | Skip / advance to next level     |
 
-Example (simplified):
+Movement only works when:
+
+* it is the player's turn
+* the tank is not falling
+* the tank has fuel remaining
+
+---
+
+## Shop Controls
+
+The shop can be opened by clicking the **shop icon** in the bottom-right corner.
+
+| Key | Action        |
+| --- | ------------- |
+| R   | Buy health    |
+| F   | Buy fuel      |
+| P   | Buy parachute |
+
+---
+
+# Configuration
+
+## Levels (`config.json`)
+
+Levels are defined in `config.json`.
+
+Each level specifies:
+
+* the terrain layout file
+* the background image
+* foreground colour
+* optional tree sprites
+
+Example:
+
 ```json
 {
   "layout": "level1.txt",
@@ -89,13 +152,78 @@ Example (simplified):
 }
 ```
 
-## Main entry point
-The game runs from:
+### Fields
 
-- `src/main/java/Tanks/App.java`
-- main class: `Tanks.App`
+| Field               | Description              |
+| ------------------- | ------------------------ |
+| `layout`            | Terrain layout text file |
+| `background`        | Background image         |
+| `foreground-colour` | RGB terrain colour       |
+| `trees`             | Optional tree sprite     |
 
-## Assets / credits
-This project includes various image and font assets under:
-- `src/main/resources/Tanks/`
-- `src/main/java/Tanks/*.ttf`
+---
+
+## Level Layout Files
+
+Files such as:
+
+```
+level1.txt
+level2.txt
+level3.txt
+```
+
+define terrain shape and initial tank placements.
+
+These files are read when a level is loaded.
+
+---
+
+# Assets
+
+Game assets are located in:
+
+```
+src/main/resources/Tanks/
+```
+
+Examples include:
+
+* background images
+* tank sprites
+* UI elements
+* tree sprites
+
+Fonts may also be included with the game source.
+
+---
+
+# Debug Features
+
+If debug mode is enabled in the code, additional shortcuts may be available for:
+
+* forcing level changes
+* skipping turns
+* testing shop behaviour
+
+These shortcuts are intended for development and testing.
+
+---
+
+# Notes
+
+* Run commands **from the project root**, otherwise resource files may not load correctly.
+* Ensure `config.json` and level files remain in the repository root.
+* Ensure all required images and assets are included in `src/main/resources/Tanks/`.
+
+---
+
+# Credits
+
+This project uses the **Processing** framework for graphics and input handling.
+
+Processing website:
+[https://processing.org/](https://processing.org/)
+
+---
+
